@@ -1,4 +1,4 @@
-name: Deploy2AWS-EC2
+name: Checkout after Push
 
 on:
   push:
