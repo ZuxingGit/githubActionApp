@@ -3,6 +3,7 @@ name: Deploy2AWS-EC2
 on:
   push:
     branches:
+      - main
       - feature
 
 jobs:
