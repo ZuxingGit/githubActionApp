@@ -3,7 +3,7 @@ name: Checkout after Push
 on:
   push:
     branches:
-      - main
+      # - main
       - feature
 
 jobs:
