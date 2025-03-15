@@ -52,12 +52,3 @@ jobs:
 
             # run the docker container
             sudo docker run -d -p 3000:3000 --name ui-app ui-app
-
-    #   - name: Install dependencies
-    #     run: npm install
-
-    #   - name: Build
-    #     run: npm run build
-
-    #   - name: Deploy
-    #     run: scp -r -i ${{ secrets.SSH_KEY }} -o StrictHostKeyChecking=no ./dist ec2-user@${{ secrets.IP_ADDRESS }}:/var/www/html/
