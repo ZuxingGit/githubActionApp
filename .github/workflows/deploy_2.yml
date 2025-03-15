@@ -14,7 +14,44 @@ jobs:
           echo The PR was merged
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Connect to EC2
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SOURCE: './'
+          REMOTE_HOST: ${{ secrets.EC2_HOST }}
+          REMOTE_USER: ${{ secrets.EC2_USERNAME }}
+          TARGET: ${{ secrets.EC2_TARGET_DIR }}
+
+      - name: Execute remote SSH commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # update system packages
+            sudo apt-get update
+
+            # install docker
+            sudo apt-get install docker.io -y
+            sudo systemctl start docker
+            sudo systemctl enable docker
+
+            # go to the project directory
+            cd ${{ secrets.EC2_TARGET_DIR }}
+
+            # optional: stop and remove the existing container
+            sudo docker stop ui-app || true
+            sudo docker rm ui-app || true
+
+            # build the docker image
+            sudo docker build -t ui-app .
+
+            # run the docker container
+            sudo docker run -d -p 3000:3000 --name ui-app ui-app
 
     #   - name: Install dependencies
     #     run: npm install

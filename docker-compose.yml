@@ -1,0 +1,18 @@
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - 3000:3000
+
+    # this is for docker compose watch mode
+    # anything mentioned under develop will be watched for changes by docker compose watch and it will perform the action mentioned
+    develop:
+      watch:
+        - path: ./package.json
+          action: rebuild
+        - path: ./package-lock.json
+          action: rebuild
+        - path: .
+          target: /app
+          action: sync
